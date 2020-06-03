@@ -78,6 +78,11 @@ func main() {
 
 		fmt.Printf("\n#### %s (%s)\n\n", *mf.Name, mf.Type.String())
 		fmt.Println(*mf.Help)
+
+		if len(labelValues) == 0 {
+			continue
+		}
+
 		fmt.Printf("\nLabels:\n\n")
 		for k, v := range labelValues {
 			fmt.Printf("  - %s\n", k)
