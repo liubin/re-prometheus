@@ -76,7 +76,7 @@ func main() {
 			}
 		}
 
-		fmt.Printf("\n#### %s (%s)\n\n", *mf.Name, mf.Type.String())
+		fmt.Printf("\n#### `%s` (%s)\n\n", *mf.Name, mf.Type.String())
 		fmt.Println(*mf.Help)
 
 		if len(labelValues) == 0 {
@@ -85,7 +85,7 @@ func main() {
 
 		fmt.Printf("\nLabels:\n\n")
 		for k, v := range labelValues {
-			fmt.Printf("  - %s\n", k)
+			fmt.Printf("  - `%s`\n", k)
 			ignore := false
 			for ili := range ignoreLabels {
 				if k == ignoreLabels[ili] {
@@ -95,12 +95,19 @@ func main() {
 			}
 
 			if ignore {
-				fmt.Printf("    - (depend on env)\n")
+				fmt.Printf("    - (not fixed)\n")
 				continue
 			}
 
-			for vk := range v {
-				fmt.Printf("    - %s\n", vk)
+			vl := make([]string, len(v))
+			i := 0
+			for k := range v {
+				vl[i] = k
+				i++
+			}
+
+			for vk := range vl {
+				fmt.Printf("    - `%s`\n", vk)
 			}
 		}
 	}
