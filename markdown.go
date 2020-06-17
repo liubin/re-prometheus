@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
@@ -34,7 +35,7 @@ func write2Markdown(fileName string, doc *Document) error {
 
 		for i := range c.Rows {
 			row := c.Rows[i]
-			mfName := fmt.Sprintf("`%s`: <br> %s", row.Name, row.Help)
+			mfName := fmt.Sprintf("`%s`: <br> %s", row.Name, fmtHelp(row.Help))
 
 			labelString := generateHTMLList(row.Labels)
 
@@ -89,4 +90,59 @@ func generateHTMLList(labels []*Label) string {
 
 	s = s + "</ul>"
 	return s
+}
+
+var (
+	escapeWordList []string
+)
+
+func init() {
+	file := ".escape_words.txt"
+
+	fi, err := os.Stat(file)
+	if err != nil || fi.IsDir() {
+		return
+	}
+	b, err := ioutil.ReadFile(file)
+	if err != nil {
+		panic(err)
+	}
+
+	lines := strings.Split(string(b), "\n")
+
+	for _, line := range lines {
+		words := strings.Split(line, ",")
+		for _, word := range words {
+			if word != "" {
+				escapeWordList = append(escapeWordList, word)
+			}
+		}
+	}
+	fmt.Printf("Escape words: %+v\n", escapeWordList)
+}
+
+func fmtHelp(s string) string {
+
+	f1 := strings.Split(s, " ")
+	r := make([]string, len(f1))
+	i := 0
+	for i < len(f1) {
+		found := false
+		t := f1[i]
+
+		for _, ew := range escapeWordList {
+			if t == ew {
+				found = true
+				break
+			}
+		}
+
+		if found {
+			t = "`" + t + "`"
+		}
+		r[i] = t
+		i++
+	}
+
+	return strings.Join(r, " ")
 }
