@@ -6,25 +6,10 @@ From metrics from prometheus endpoint to generate markdown about metrics: name, 
 ## Run
 
 ```
-IGNORE_LABELS=sandbox_id go run main.go  http://localhost:8090/metrics
+UNFIXED_LABELS=sandbox_id,device,interface,disk go run main.go  http://localhost:8090/metrics
 ```
 
-This will print out some like this:
+This will write metrics yaml and markdown file under `tmp/`.
 
-```
-#### system_load (GAUGE)
-
-Guest system load.
-
-Labels:
-
-  - sandbox_id
-    - (depend on env)
-  - item
-    - load1
-    - load15
-    - load5
-```
-
-`IGNORE_LABELS` means this label is not a fixed cardinality label, need not print label's values.
+`UNFIXED_LABELS` means this label is not a fixed cardinality label, need not print label's values.
 
