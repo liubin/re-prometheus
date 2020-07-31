@@ -6,7 +6,8 @@ From metrics from prometheus endpoint to generate markdown about metrics: name, 
 ## Run
 
 ```
-UNFIXED_LABELS=sandbox_id,device,interface,disk go run main.go  http://localhost:8090/metrics
+$ go build
+$ UNFIXED_LABELS=sandbox_id,device,interface,disk ./re-prometheus http://localhost:8090/metrics
 ```
 
 This will write metrics yaml and markdown file under `tmp/`.
